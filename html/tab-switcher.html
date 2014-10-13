@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TAB Switch</title>
+    <script type="text/javascript" src="../js/tab-switcher.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 12px;
+        }
+        .notice {
+            width: 298px;
+            height: 98px;
+            margin: 10px;
+            border: 1px solid #eee;
+            /* fix float */
+            display: table;
+            clear: both;
+        }
+        ul.notice-tit {
+            height: 27px;
+            position: relative;
+            background: #7f7f7f;
+        }
+        ul.notice-tit li {
+            float: left;
+            margin: 5px 25px;
+        }
+        .notice div {
+            margin: 5px 10px;
+            display: none;
+
+        }
+        .notice div.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="notice" id='notice'></div>
+
+    <script>
+        var tabView = new TABView({
+            items: [
+                {title: '今日热播', content: '关于今日最新的热门电视剧'},
+                {title: '影视剧', content: '最新不容错过的电影'},
+                {title: '好声音', content: '中国好声音，你值得拥有'}
+            ],
+            placeHolder: 'notice',
+            selIndex: 0,
+            cssClass: 'notice-tit'
+        });
+        tabView.render();
+    </script>
+</body>
+</html>
+
+
