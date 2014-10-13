@@ -2,7 +2,7 @@
 //       2. support more flexible event such as mouseover, or click or event
 //       automatically timer interval switch 
 //       3. should not depend on other js lib
-(function () {
+(function (exports) {
     function TABView(props) {
         if (this.init) {
             this.init(props);
@@ -49,11 +49,11 @@
             // setup DOM event
             // TODO: should be removed out
             var titles = document.querySelectorAll('li', ph);
-            titles = [].slice.call(titles, 0);
+            titles = [].slice.call(titles, 1);
             titles.forEach(function (title, index) {
                 title.addEventListener('mouseover', function (evt) {
                     divs.forEach(function (div) {
-                        div.className = '';
+                        div.className = 'hidden';
                     });
                     this.selIndex = index;
                     divs[index].className = 'show';
@@ -78,4 +78,6 @@
             return '<li><a href="#" target="_blank">' + item.title + '</a></li>';
         }
     });
-}());
+
+    exports.TABView = TABView;
+}(this));
