@@ -16,7 +16,7 @@ func MustGetFileContentAsString(filename string) string {
 	return string(bytes)
 }
 func QueryHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("foud a request")
+	fmt.Println("request")
 	callback := "fnProcess"
 	response := `{"name":"Jiaxiang Zheng","sex":"male","school":[{"NCU":"Nanchang University"},{"ZJU":"Zhejiang University"}]}`
 	fmt.Fprintf(w, "%s(%s)", callback, response)
