@@ -39,4 +39,3 @@ obj.on('click', function (msg) {
 });
 
 obj.trigger('click', 'msg');
-

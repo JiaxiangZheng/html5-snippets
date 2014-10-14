@@ -11,11 +11,14 @@
             list-style: none;
             font-size: 12px;
         }
+        .description, .notes {
+            margin: 10px; 
+        }
         .notice {
             width: 298px;
             height: 98px;
             margin: 10px;
-            border: 1px solid #eee;
+            border: 1px solid #888;
             /* fix float */
             display: table;
             clear: both;
@@ -29,26 +32,35 @@
             float: left;
             margin: 5px 25px;
         }
+        .notice-tit li.active:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
+            border: 5px solid;
+            border-color: transparent transparent white;
+        }
         .notice div {
             margin: 5px 10px;
             display: none;
-
         }
         .notice div.show {
             display: block;
         }
         .notice div.hidden {
-            display: block;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="description">这个DEMO用于演示TAB选项卡随鼠标移动的自由切换</div>
-    <div class="notess">
+    <div class="notes">
       <div>学习要点：</div>
       <ul>
         <li>CSS浮动造成的父元素高度塌陷补救方法</li>
-        <li>JS实现动态内容</li>
+        <li>JS面向对象式实现动态内容</li>
       </ul>
     </div>
     <div class="notice" id='notice'></div>

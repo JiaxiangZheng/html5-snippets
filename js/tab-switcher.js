@@ -40,23 +40,30 @@
             var ph = document.querySelector('#' + this.placeHolder);
             // var node = document.createDocumentFragment();
             ph.innerHTML = this.buildDOM();
-            var divs = document.querySelectorAll('div', ph);
-            divs = [].slice.call(divs, 1);
+            var divs = ph.querySelectorAll('div'),
+                titles = ph.querySelectorAll('li');
+            divs = [].slice.call(divs, 0);
             this.selIndex = this.selIndex || 0;
             divs[this.selIndex].className = 'show';
+            titles[this.selIndex].className = 'active';
             // ph.appendChild(node);
 
             // setup DOM event
             // TODO: should be removed out
-            var titles = document.querySelectorAll('li', ph);
-            titles = [].slice.call(titles, 1);
+            var $this = this;
+            titles = [].slice.call(titles, 0);
             titles.forEach(function (title, index) {
                 title.addEventListener('mouseover', function (evt) {
                     divs.forEach(function (div) {
                         div.className = 'hidden';
                     });
-                    this.selIndex = index;
+                    titles.forEach(function (title) {
+                        title.className = '';
+                    });
+
+                    $this.selIndex = index;
                     divs[index].className = 'show';
+                    titles[index].className = 'active';
                 }, false);
             });
         },
