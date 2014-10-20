@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Query Demo</title>
+</head>
+<body>
+    <div id="descriptionp">
+        <p>本例说明如何使用JSONP获得12306上从杭州到九江的火车票信息（打开console）</p>
+        
+        <p>先运行<code>go run
+            JSONP.go</code>开启本地的WEB服务器，然后直接打开网页就可以查询结果。</p>
+    </div>
+    <div id="queryApp">
+        <form action="" id="form">
+            <label for="query-date">日期：</label>
+            <input type="date" name="query-date" id="query-date" required="required" />
+            <br/>
+            <button id="query-submit">提交</button>
+        </form>
+        <div id="result">
+        </div>
+    </div>
+
+    <script src="../js/JSONP.js" type="text/javascript"></script>
+</body>
+</html>
