@@ -12,7 +12,7 @@
             return
         }
         // response is the object created by the JSON
-        console.log("²éÑ¯µ½" + response + "ÌË³µ´Î£¡");
+        console.log("æŸ¥è¯¢åˆ°" + response + "è¶Ÿè½¦æ¬¡ï¼");
         alert(response.data.length);
     }
     function JSONP(_date, _from, _to) {
