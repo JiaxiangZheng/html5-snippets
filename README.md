@@ -12,4 +12,4 @@ This repository contains my JS/HTML/CSS related code snippets for studying.
 * [多重继承机制-支持super](js/mixin.js)
 * [JS对象构造的TAB选项卡](html/tab-switcher.html)
 * [JSONP实现查询12306火车票信息](html/JSONP.html)
-
+* [RegExp实现HTML模板](js/template.js)
