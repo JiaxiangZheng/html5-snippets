@@ -23,5 +23,5 @@ var obj = {
     id: '21121098',
     cssClass: 'center',
     cssText: 'border: 1px solid red;'
-}
+};
 console.log(warpMarkup(markupString, obj));
