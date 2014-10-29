@@ -6,7 +6,7 @@ md_files = md_files.filter(function (file) {
     return path.extname(file) === ".md";
 });
 
-// 多个文件同时异步读取，callback在所有文件读取完毕后执行
+// 澶氫釜鏂囦欢鍚屾椂寮傛璇诲彇锛宑allback鍦ㄦ墍鏈夋枃浠惰鍙栧畬姣曞悗鎵ц
 (function (i, len, count, callback) {
     for (; i < len; i++) {
         (function (index) {
@@ -22,7 +22,7 @@ md_files = md_files.filter(function (file) {
     console.log("finished parellal reading file");
 });
 
-// 多个文件按先后顺序异步读取，callback在所有文件读取完毕后执行
+// 澶氫釜鏂囦欢鎸夊厛鍚庨『搴忓紓姝ヨ鍙栵紝callback鍦ㄦ墍鏈夋枃浠惰鍙栧畬姣曞悗鎵ц
 (function next(i, len, callback) {
     if (i < len) {
         fs.readFile(md_files[i], function (err, data) {
