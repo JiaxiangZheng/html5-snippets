@@ -1,6 +1,6 @@
 (function (exports){
-	var svgLeadingString = "http://www.w3.org/2000/svg",
-	    colorDefault = ['#ff7f50','#87cefa','#da70d6','#32cd32','#6495ed',
+    var svgLeadingString = "http://www.w3.org/2000/svg",
+        colorDefault = ['#ff7f50','#87cefa','#da70d6','#32cd32','#6495ed',
                         '#ff69b4','#ba55d3','#cd5c5c','#ffa500','#40e0d0',
                         '#1e90ff','#ff6347','#7b68ee','#00fa9a','#ffd700',
                         '#6699FF','#ff6666','#3cb371','#b8860b','#30e0e0'];
@@ -14,6 +14,12 @@
 
     function hMoveTo(iX, iY) {
         return "M " + iX + " " + iY;
+    }
+    function hVertical(iY) {
+        return "V" + iY;
+    }
+    function hHorizontal(iX) {
+        return "H" + iX;
     }
 
     function hLineTo(iX, iY) {
@@ -46,48 +52,48 @@
         return lDStr;
     }
 
-	/**
-	 * @param type String such as "path", "svg", etc...
-	 */
-	function getSVGElement(type) {
-		return document.createElementNS(svgLeadingString, type);
-	}
+    /**
+     * @param type String such as "path", "svg", etc...
+     */
+    function getSVGElement(type) {
+        return document.createElementNS(svgLeadingString, type);
+    }
 
-	function hasSelected(shape) {
-		var status = shape.getAttribute('status');
-		if (status && status.indexOf('select') > -1) return true;
-		return false;
-	}
-	function selectShape(shape) {
-		shape.setAttribute('status', 'select');
-		shape.style.stroke = 'black'; shape.style.strokeWidth = 2;
-	}
-	function unselectShape(shape) {
-		shape.setAttribute('status', '');
-		shape.style.strokeWidth = 0;
-	}
+    function hasSelected(shape) {
+        var status = shape.getAttribute('status');
+        if (status && status.indexOf('select') > -1) return true;
+        return false;
+    }
+    function selectShape(shape) {
+        shape.setAttribute('status', 'select');
+        shape.style.stroke = 'black'; shape.style.strokeWidth = 2;
+    }
+    function unselectShape(shape) {
+        shape.setAttribute('status', '');
+        shape.style.strokeWidth = 0;
+    }
     function attachEvents(node) {
-		node.addEventListener("mouseover", function (evt) {
-			var tar = evt.target;
-			if (tar.getAttribute("type") != "shape") return;
-			tar.style.opacity = 0.5;
-		});
-		node.addEventListener("mouseout", function (evt) {
-			var tar = evt.target;
-			if (tar.getAttribute("type") != "shape") return;
-			tar.style.opacity = 1.0;
-		});
-		node.addEventListener('click', function (evt) {
-			var tar = evt.target;
-			if (tar.getAttribute("type") != "shape") return;
-			if (hasSelected(tar)) {
-				unselectShape(tar);
-			} else {
-				selectShape(tar);
-			}
-		});
+        node.addEventListener("mouseover", function (evt) {
+            var tar = evt.target;
+            if (tar.getAttribute("type") != "shape") return;
+            tar.style.opacity = 0.5;
+        });
+        node.addEventListener("mouseout", function (evt) {
+            var tar = evt.target;
+            if (tar.getAttribute("type") != "shape") return;
+            tar.style.opacity = 1.0;
+        });
+        node.addEventListener('click', function (evt) {
+            var tar = evt.target;
+            if (tar.getAttribute("type") != "shape") return;
+            if (hasSelected(tar)) {
+                unselectShape(tar);
+            } else {
+                selectShape(tar);
+            }
+        });
         var mouseDown = false;
-		node.addEventListener('mousedown', function (evt) {
+        node.addEventListener('mousedown', function (evt) {
             console.log('mousedown');
             mouseDown = true;
         });
@@ -99,55 +105,55 @@
             console.log("selecting lasso");
         });
     }
-	function Pie(placeholder, data) {
-		this.pNode = document.getElementById(placeholder);
-		if (data) {
-			this.update(data);
-		}
+    function Pie(placeholder, data) {
+        this.pNode = document.getElementById(placeholder);
+        if (data) {
+            this.update(data);
+        }
         attachEvents(this.pNode);
-	}
-	Pie.prototype.unrender = function () {
-		var ph = this.pNode,
-			chs = ph.childNodes;
-		[].forEach.call(chs, function (ch) {
-			ph.removeChild(ch);
-		});
-		this.hasRendered = false;
-	}
-	Pie.prototype.update = function (data) {
-		if (!data || data.length === 0) return;
+    }
+    Pie.prototype.unrender = function () {
+        var ph = this.pNode,
+            chs = ph.childNodes;
+        [].forEach.call(chs, function (ch) {
+            ph.removeChild(ch);
+        });
+        this.hasRendered = false;
+    }
+    Pie.prototype.update = function (data) {
+        if (!data || data.length === 0) return;
 
-		if (this.hasRendered) {
-			this.unrender();
-		}
+        if (this.hasRendered) {
+            this.unrender();
+        }
 
-		var ph = this.pNode,
-			svg = getSVGElement("svg");
+        var ph = this.pNode,
+            svg = getSVGElement("svg");
 
-		svg.style.width = "100%";
-		svg.style.height = "100%";
-		ph.appendChild(svg);
+        svg.style.width = "100%";
+        svg.style.height = "100%";
+        ph.appendChild(svg);
 
-		var sum = data.reduce(function (x, y) {return x + y;}, 0),
-			curSum = 0;
-		var centerX = 200, 
-			centerY = 200,
-			radius = 100;
+        var sum = data.reduce(function (x, y) {return x + y;}, 0),
+            curSum = 0;
+        var centerX = 200, 
+            centerY = 200,
+            radius = 100;
 
-		data.forEach(function (value, index) {
-			var startAngle = 360 * curSum,
-				endAngle = 360 * (curSum += (value / sum)),
-				pathNode = getSVGElement("path");
-			pathNode.setAttribute("class", "gm-shape-pie");
-			pathNode.setAttribute("type", "shape");
-			pathNode.setAttribute("subtype", "pie");
-			pathNode.setAttribute('d', getPiePointString(centerX, centerY, radius, startAngle, endAngle));
-			pathNode.style.fill = colorDefault[index % colorDefault.length];
-			svg.appendChild(pathNode);
-		});
+        data.forEach(function (value, index) {
+            var startAngle = 360 * curSum,
+                endAngle = 360 * (curSum += (value / sum)),
+                pathNode = getSVGElement("path");
+            pathNode.setAttribute("class", "gm-shape-pie");
+            pathNode.setAttribute("type", "shape");
+            pathNode.setAttribute("subtype", "pie");
+            pathNode.setAttribute('d', getPiePointString(centerX, centerY, radius, startAngle, endAngle));
+            pathNode.style.fill = colorDefault[index % colorDefault.length];
+            svg.appendChild(pathNode);
+        });
 
-		this.hasRendered = true;
-	}
+        this.hasRendered = true;
+    }
 
-	exports.Pie = Pie;
+    exports.Pie = Pie;
 }(window));
