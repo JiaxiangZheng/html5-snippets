@@ -4,6 +4,11 @@
                         '#ff69b4','#ba55d3','#cd5c5c','#ffa500','#40e0d0',
                         '#1e90ff','#ff6347','#7b68ee','#00fa9a','#ffd700',
                         '#6699FF','#ff6666','#3cb371','#b8860b','#30e0e0'];
+    function mergeIntervals(shapes) {
+        shapes.sort(function (s1, s2) {
+            s1.sStartRadian > s2.sEndRadian;
+        });
+    }
 
     function hCalPoint(iX, iY, iR, iRadian) {
         var lX = iX + iR * Math.cos(iRadian),
@@ -66,11 +71,9 @@
     }
     function selectShape(shape) {
         shape.setAttribute('status', 'select');
-        shape.style.stroke = 'black'; shape.style.strokeWidth = 2;
     }
     function unselectShape(shape) {
         shape.setAttribute('status', '');
-        shape.style.strokeWidth = 0;
     }
     function attachEvents(node) {
         node.addEventListener("mouseover", function (evt) {
@@ -134,8 +137,12 @@
         svg.style.height = "100%";
         ph.appendChild(svg);
 
+        this.chart = svg;
+        svg.ctr = this;
+
         var sum = data.reduce(function (x, y) {return x + y;}, 0),
             curSum = 0;
+
         var centerX = 200, 
             centerY = 200,
             radius = 100;
