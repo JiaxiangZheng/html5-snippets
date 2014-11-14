@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>SVG Pie DEMO</title>
+	<style>
+		#pie-1 {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="example">
+		<p>请输入数据生成对应的饼图</p>
+
+		<input type="text" id="data" value="10 20 30 40">
+		<input type="submit" id="submit">
+
+		<p>以下显示的是Pie图</p>
+		<div class="svg" id="pie-1"></div>
+	</div>
+	<script src="../js/SVGChart.js"></script>
+	<script>
+		var inputNode = document.getElementById('data'),
+			submitNode = document.getElementById('submit'),
+			pie = new Pie("pie-1");
+
+		submitNode.addEventListener('click', function (evt) {
+            if (inputNode.value === "") return;
+			var data = inputNode.value.split(' ');
+			data = data.map(function (value) {
+				return +value;
+			});
+			pie.update(data);
+		});
+
+	</script>
+</body>
+</html>

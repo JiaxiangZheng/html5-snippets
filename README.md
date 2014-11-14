@@ -13,3 +13,4 @@ This repository contains my JS/HTML/CSS related code snippets for studying.
 * [JS对象构造的TAB选项卡](html/tab-switcher.html)
 * [JSONP实现查询12306火车票信息](html/JSONP.html)
 * [RegExp实现HTML模板](js/template.js)
+* [SVG实现的饼图](js/SVGChart.js)   // TODO: 点击Pie图的时候，如果相邻元素被选中，只高亮最外围的边界（不高亮相邻边界）
