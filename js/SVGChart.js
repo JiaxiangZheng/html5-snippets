@@ -66,11 +66,35 @@
     }
     function selectShape(shape) {
         shape.setAttribute('status', 'select');
-        shape.style.stroke = 'black'; shape.style.strokeWidth = 2;
+        // shape.style.stroke = 'black'; shape.style.strokeWidth = 2;
     }
     function unselectShape(shape) {
         shape.setAttribute('status', '');
-        shape.style.strokeWidth = 0;
+        // shape.style.strokeWidth = 0;
+    }
+    function getDecoratorString(iX, iY, iR, iSR, iER) {
+    	return getPiePointString(iX, iY, iR - 1, iSR, iER);
+    }
+    function handleSelected(shapes) {
+    	if (!shapes || shapes.length === 0) return;
+    	var decorators = {},
+    		iX = shapes[0].sX,
+    		iY = shapes[0].sY,
+    		iR = shapes[0].sR;
+    	shapes.sort(function (s1, s2) {
+    		return s1.sBeginAngle - s2.sBeginAngle;
+    	});
+    	// shapes.forEach(function (shape) {
+    	// 	console.log(shape.sBeginAngle, shape.sEndAngle ,shape.sR);
+    	// });
+    	// TODO(jiaxzheng): current implementation only combine the first start and final end
+    	var outter = getSVGElement('path');
+    	outter.setAttribute('class', 'decorator');
+    	outter.style.fill = 'none';
+    	outter.style.stroke = 'black';
+    	outter.style.strokeWidth = 2;
+    	outter.setAttribute('d', getDecoratorString(iX, iY, iR, shapes[0].sBeginAngle, shapes[shapes.length - 1].sEndAngle));
+    	return outter;
     }
     function attachEvents(node) {
         node.addEventListener("mouseover", function (evt) {
@@ -84,17 +108,31 @@
             tar.style.opacity = 1.0;
         });
         node.addEventListener('click', function (evt) {
-            var tar = evt.target;
+            var tar = evt.target,
+            	proxy = this.proxy;
             if (tar.getAttribute("type") != "shape") return;
+
             if (hasSelected(tar)) {
                 unselectShape(tar);
+                proxy.selectedShapes = proxy.selectedShapes.filter(function (shape) {
+                	if (shape !== tar) return true;
+                	return false;
+                });
             } else {
                 selectShape(tar);
+                proxy.selectedShapes.push(tar);
+            }
+            if (node.decorators) {
+            	node.svg.removeChild(node.decorators);
+            }
+            node.decorators = handleSelected(proxy.selectedShapes);
+            if (node.decorators) {
+	            node.svg.appendChild(node.decorators);	
             }
         });
         var mouseDown = false;
         node.addEventListener('mousedown', function (evt) {
-            console.log('mousedown');
+            // console.log('mousedown');
             mouseDown = true;
         });
         node.addEventListener('mouseup', function (evt) {
@@ -102,11 +140,12 @@
         });
         node.addEventListener('mousemove', function (evt) {
             if (!mouseDown) return;
-            console.log("selecting lasso");
+            // console.log("selecting lasso");
         });
     }
     function Pie(placeholder, data) {
         this.pNode = document.getElementById(placeholder);
+        this.selectedShapes = [];
         if (data) {
             this.update(data);
         }
@@ -130,6 +169,9 @@
         var ph = this.pNode,
             svg = getSVGElement("svg");
 
+        ph.proxy = this;
+        ph.svg = svg;
+
         svg.style.width = "100%";
         svg.style.height = "100%";
         ph.appendChild(svg);
@@ -147,6 +189,13 @@
             pathNode.setAttribute("class", "gm-shape-pie");
             pathNode.setAttribute("type", "shape");
             pathNode.setAttribute("subtype", "pie");
+            
+            pathNode.sX = centerX;
+            pathNode.sY = centerY;
+            pathNode.sR = radius;
+            pathNode.sBeginAngle = startAngle;
+            pathNode.sEndAngle = endAngle;
+
             pathNode.setAttribute('d', getPiePointString(centerX, centerY, radius, startAngle, endAngle));
             pathNode.style.fill = colorDefault[index % colorDefault.length];
             svg.appendChild(pathNode);
