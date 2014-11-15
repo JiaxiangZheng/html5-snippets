@@ -1,0 +1,35 @@
+html, body, div, span, h1, h2, h3, h4, p, img, strong, ol, ul, li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+body {
+  background: #F4F4F4;
+}
+
+#container {
+  position: relative;
+  margin: 40px 120px;
+  min-height: 32px;
+}
+
+#svg-pie, #svg-ring {
+	margin: 10px;
+	width: 100px;
+	height: 100px;
+}
+
+.gm-outter-decorator {
+    fill: none;
+    stroke: black;
+    stroke-width: 2px;
+}
+.gm-inner-decorator {
+    fill: none;
+    stroke: white;
+    stroke-width: 1px;
+}
