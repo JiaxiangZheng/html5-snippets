@@ -39,16 +39,32 @@ define(function (require, exports, module) {
         return document.createElementNS(svgLeadingString, type);
     }
 
-    svgops.getPiePointString = function (iX, iY, iR, iStartDegree, iEndDegree, bAnticlock) {
+    svgops.getPiePointString = function (iX, iY, iR, iStartDegree, iEndDegree, bAnticlock, shrink) {
         // FIXME: check parameters
         var iStartRadian = iStartDegree * Math.PI / 180,
-            iEndRadian = iEndDegree * Math.PI / 180;
+            iEndRadian = iEndDegree * Math.PI / 180,
+            lDStr = "";
 
-        var lDStr = hMoveTo(iX, iY),
-            lCurveStartP = hCalPoint(iX, iY, iR, iStartRadian),
+        // TODO: 
+        if (shrink != undefined) {
+            var newCenter;
+            iR -= shrink;
+            if (bAnticlock) {
+                newCenter = hCalPoint(iX, iY, 2, (iStartRadian + (2*Math.PI - iEndRadian)) / 2);
+                iStartRadian -= shrink / iR;
+                iEndRadian += shrink / iR;
+            } else {
+                newCenter = hCalPoint(iX, iY, 2, (iStartRadian + iEndRadian) / 2);
+                iStartRadian += shrink / iR;
+                iEndRadian -= shrink / iR;
+            }
+            lDStr += hMoveTo(newCenter.x, newCenter.y);
+        } else {
+            lDStr = hMoveTo(iX, iY);
+        }
+        var lCurveStartP = hCalPoint(iX, iY, iR, iStartRadian),
             lCurveEndP = hCalPoint(iX, iY, iR, iEndRadian),
             lLargeArc = (iEndRadian - iStartRadian) > Math.PI;
-
         if (bAnticlock) {
             lLargeArc = !lLargeArc;
         }

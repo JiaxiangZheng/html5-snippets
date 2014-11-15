@@ -32,7 +32,9 @@ define(function (require, exports, module) {
             // TODO: we should move the center for inner decorator node
             // FIXME: for the anticloc arch across the 0 degree, the white
             // decorator's spreading direction is wrong
-            decoratorNode.setAttribute('d', svgops.getPiePointString(centerX, centerY, radius - 3, slice.startAngle, slice.endAngle, slice.bSeepFlag));
+
+            // shrink denotes the circle's center should move a bit outter 
+            decoratorNode.setAttribute('d', svgops.getPiePointString(centerX, centerY, radius, slice.startAngle, slice.endAngle, slice.bSeepFlag, 3));
         }
         decoratorNode.setAttribute("class", "gm-inner-decorator");
         return decoratorNode;
@@ -115,22 +117,11 @@ define(function (require, exports, module) {
         mergeSlices.forEach(function (slice) {
             // circle
             var decoratorOutter = getOutterDecorator(slice, centerX, centerY, radius);
-            var decoratorInner = getInnerDecorator(slice, centerX, centerY, radius);
             decoratorGroup.appendChild(decoratorOutter);
+            var decoratorInner = getInnerDecorator(slice, centerX, centerY, radius);
             decoratorGroup.appendChild(decoratorInner);
         });
     }
     // TODO: we should move this to an abstract class which can serve as default behavior
-    Pie.prototype.mouseover = function (evt) {
-        var tar = evt.target;
-        if (tar.getAttribute("type") != "shape") return;
-        tar.style.opacity = 0.7;
-    }
-    Pie.prototype.mouseout = function (evt) {
-        var tar = evt.target;
-        if (tar.getAttribute("type") != "shape") return;
-        tar.style.opacity = 1.0;
-    }
-
   	module.exports = Pie;
 });
