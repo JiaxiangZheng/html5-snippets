@@ -61,6 +61,7 @@ define(function (require, exports, module) {
             centerY = posInfo.oY,
             radius = Math.min(posInfo.oX, posInfo.oY) - 10;
 
+        // TODO: if data contains only one element, should draw a circle rather than slice-pie
         data.forEach(function (value, index) {
             var startAngle = 360 * curSum,
                 endAngle = 360 * (curSum += (value / sum)),

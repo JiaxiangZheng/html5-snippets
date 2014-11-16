@@ -39,22 +39,31 @@ define(function (require, exports, module) {
         return document.createElementNS(svgLeadingString, type);
     }
 
+    // TODO: optimize
+    function isUndefined() {
+        var args = [].slice.call(arguments);
+
+        return args.every(function (arg) {
+            return typeof arg === 'undefined';
+        });
+    }
     svgops.getPiePointString = function (iX, iY, iR, iStartDegree, iEndDegree, bAnticlock, shrink) {
-        // FIXME: check parameters
+        if (isUndefined(iX, iY, iR)) return "";
         var iStartRadian = iStartDegree * Math.PI / 180,
             iEndRadian = iEndDegree * Math.PI / 180,
             lDStr = "";
 
-        // TODO: 
-        if (shrink != undefined) {
-            var newCenter;
+        if (!isUndefined(shrink)) {
+            var newCenter, 
+                iCenterRadian = (iStartRadian + iEndRadian) / 2;
             iR -= shrink;
             if (bAnticlock) {
-                newCenter = hCalPoint(iX, iY, 2, (iStartRadian + (2*Math.PI - iEndRadian)) / 2);
+                newCenter = hCalPoint(iX, iY, 2, iCenterRadian > Math.PI ? iCenterRadian - Math.PI : iCenterRadian + Math.PI);
+
                 iStartRadian -= shrink / iR;
                 iEndRadian += shrink / iR;
             } else {
-                newCenter = hCalPoint(iX, iY, 2, (iStartRadian + iEndRadian) / 2);
+                newCenter = hCalPoint(iX, iY, 2, iCenterRadian);
                 iStartRadian += shrink / iR;
                 iEndRadian -= shrink / iR;
             }
