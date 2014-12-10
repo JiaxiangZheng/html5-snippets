@@ -68,6 +68,11 @@ func queryHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintln(w, callback + "(" + response + ");")
 }
 
+// 使用HTML模板生成主页面
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func main() {
 	jar := NewJar()
 	tr := &http.Transport{
