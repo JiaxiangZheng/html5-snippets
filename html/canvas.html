@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <canvas id="demo" width="300" height="300">
+        Your browser doesn't support canvas
+    </canvas>
+
+    <canvas id="image" width="300" height="300">
+        Your browser doesn't support canvas
+    </canvas>
+
+    <canvas id="spiro" width="300" height="300">
+        Your browser doesn't support canvas
+    </canvas>
+
+    <canvas id="clock" width="300" height="300">
+        Your browser doesn't support canvas
+    </canvas>
+
+    <script>
+        !function () {
+            function drawSingleSpirograph(ctx, R, r, O, rotate) {
+                var x1 = R-O;
+                var y1 = 0;
+                var i  = 1;
+                ctx.rotate(rotate);
+                ctx.beginPath();
+                ctx.moveTo(x1,y1);
+                do {
+                    if (i > 20000) break;
+                    var x2 = (R+r)*Math.cos(i*Math.PI/72) - (r+O)*Math.cos(((R+r)/r)*(i*Math.PI/72));
+                    var y2 = (R+r)*Math.sin(i*Math.PI/72) - (r+O)*Math.sin(((R+r)/r)*(i*Math.PI/72));
+                    ctx.lineTo(x2,y2);
+                    x1 = x2;
+                    y1 = y2;
+                    i++;
+                } while (x2 != R-O && y2 != 0 );
+                ctx.stroke();
+            }
+
+            function drawSpirograph(context, canvas) {
+                var theta = 0;
+                setInterval(function () {
+                    context.fillRect(0,0,300,300);
+                    for (var i=0; i < 3; i++) {
+                        for (var j=0;j<3;j++) {
+                            context.save();
+                            context.strokeStyle = "#9CFF00";
+                            context.translate(50+j*100, 50+i*100);
+                            drawSingleSpirograph(context, 20*(j+2)/(j+1),-8*(i+3)/(i+1),10, theta);
+                            context.restore();
+                        }
+                    }
+                    theta += Math.PI / 180;
+                    if (theta >= Math.PI * 2) {
+                        theta = 0;
+                    }
+                }, 30);
+            }
+
+            function drawImage(context, canvas) {
+                context.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+
+                var img = new Image();
+                img.src = './img.jpg';
+                img.addEventListener('load', function () {
+                    context.drawImage(img, 0, 0);
+                }, false);
+            }
+
+            function drawClock(context, canvas) {
+                var style = {
+                    fillStyle: 'white'
+                };
+
+                var rad = {
+                        H: 0,
+                        M: 0,
+                        S: 0
+                    },
+                    ticWidth = 10,
+                    ticHeight = 2;
+                var timeInterval = 60;
+                setInterval(function () {
+                    var tic = new Date();
+                    rad.H = tic.getHours() * Math.PI / 30;
+                    rad.M = tic.getMinutes() * Math.PI / 30 - Math.PI / 90;
+                    rad.S = tic.getSeconds() * Math.PI / 30 - Math.PI / 90;
+//                    console.log(rad);
+                    context.fillStyle = 'black';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+
+                    context.save();
+
+                    context.translate(canvas.width / 2, canvas.height / 2);
+                    for (var deg = 0, cnt = 0; deg < 360; deg += 6, cnt++) {
+                        var r = Math.PI * deg / 180;
+                        context.save();
+                        context.rotate(r);
+                        context.translate(100, 0);
+                        context.lineWidth = 10;
+                        context.strokeStyle = 'red';
+                        context.fillStyle = style.fillStyle;
+                        if (cnt % 5 === 0) {
+                            var tW = ticWidth + 10;
+                            context.fillRect(-tW / 2, -ticHeight / 2, tW, ticHeight);
+                        } else {
+                            context.fillRect(-ticWidth / 2, -ticHeight / 2, ticWidth, ticHeight);
+                        }
+                        context.restore();
+                    }
+
+                    context.save();
+                    context.fillStyle = 'white';
+                    context.rotate(rad.H);
+                    context.fillRect(0, 0, 40, 2);
+                    context.restore();
+
+                    context.save();
+                    context.fillStyle = 'white';
+                    context.rotate(rad.M);
+                    context.fillRect(0, 0, 60, 2);
+                    context.restore();
+
+                    context.save();
+                    context.fillStyle = 'white';
+                    context.rotate(rad.S);
+                    context.fillRect(0, 0, 80, 2);
+                    context.restore();
+
+                    context.restore();
+                }, timeInterval);
+            }
+
+            function drawShape(context, canvas) {
+                context.fillStyle = 'black';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+
+                context.scale(0.5, 0.5);
+
+                context.fillStyle = 'red';
+                context.fillRect(20, 20, 50, 50);
+
+                context.scale(2.0, 2.0);
+
+                context.lineWidth = 10;
+                context.strokeStyle = 'white';
+                context.strokeRect(20, 20, 50, 50);
+
+                context.lineWidth = 3;
+                context.strokeStyle = 'white';
+                context.beginPath();
+                context.moveTo(100, 100);
+                context.lineTo(150, 200);
+                context.lineTo(200, 200);
+                context.closePath();
+                context.stroke();
+                context.fill();
+
+                context.fillStyle = 'white';
+                context.beginPath();
+                context.arc(200, 100, 50, 0, Math.PI * 2, false);
+                context.fill();
+                context.closePath();
+
+                context.font = '15px Arial';
+                context.fillStyle = 'white';
+                context.fillText('hello world', 200, 250);
+            }
+            window.onload = function () {
+                [{
+                    id: 'demo',
+                    callback: drawShape
+                }, {
+                    id: 'image',
+                    callback: drawImage
+                }, {
+                    id: 'spiro',
+                    callback: drawSpirograph
+                }, {
+                    id: 'clock',
+                    callback: drawClock
+                }].forEach(function (example) {
+                    var canvas = document.getElementById(example.id),
+                        context = canvas.getContext('2d');
+                    example.callback(context, canvas);
+                });
+            }
+        }();
+    </script>
+</body>
+</html>
