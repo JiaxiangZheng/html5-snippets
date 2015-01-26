@@ -1,0 +1,56 @@
+<html>
+<head>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1-rc2/jquery.min.js"></script>
+    <style>
+        h2 {
+            color: red;
+            font-family: Arial;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .deprecated {
+            color: #e00;
+        }
+        .pass {
+            color: #0e0;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+    </div>
+
+    <script>
+        function sendXHR(url) {
+            return new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            resolve(xhr.response);
+                        } else {
+                            reject(new Error(xhr.statusText));
+                        }
+                    }
+                };
+                xhr.send();
+            });
+        }
+        sendXHR('story.json').then(JSON.parse, function (err) {
+            console.error('error');
+        }).then(function (data) {
+            data.chapterUrls.reduce(function (promise, url) {
+                return promise.then(function () {
+                    return sendXHR(url);
+                }).then(JSON.parse).then(function (chapter) {
+                    console.log(chapter);
+                    $('#container').insert(chapter.html);
+                });
+            }, Promise.resolve());
+        });
+    </script>
+</body>
+</html>
