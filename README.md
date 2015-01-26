@@ -14,3 +14,6 @@ This repository contains my JS/HTML/CSS related code snippets for studying.
 * [JSONP实现查询12306火车票信息](html/JSONP.html)
 * [RegExp实现HTML模板](js/template.js)
 * [SVG实现的饼图](html/SVGChart.html)
+* [数组for循环性能探究](js/for-benchmark.js)
+    - 首先带缓存数组长度的for的性能要优于forEach
+    - `for in`很慢
