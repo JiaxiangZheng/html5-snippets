@@ -71,7 +71,7 @@ $DND = {
 		// 1. ondragenter for drop widget
 		// 2. ondragover for drop widget
 		// 3. ondragmove for src widget
-		
+
 		updateAvatar({
 			left: e.clientX,
 			top: e.clientY
@@ -82,9 +82,9 @@ $DND = {
 		$DOM.removeEventListener('mouseup', onUpDuringDrag);
 
 		// 1. ondrop for target
-		// 
+		//
 		// 2. ondragend for source
-		// 
+		//
 		// post process for hide avatar
 		hideAvatar();
 	},

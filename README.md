@@ -17,3 +17,5 @@ This repository contains my JS/HTML/CSS related code snippets for studying.
 * [数组for循环性能探究](js/for-benchmark.js)
     - 首先带缓存数组长度的for的性能要优于forEach
     - `for in`很慢
+
+==
